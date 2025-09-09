@@ -5,20 +5,30 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
+
 using static UnityEditor.PlayerSettings;
 
 public class Player : MonoBehaviour
 {
+    private SpriteRenderer sr;
+
     private Grid grid;
     private Tilemap tilemap;
     private Vector3Int currentPosition;
+    public GameUI gameUI;
     //[SerializeField] private Vector2Int minTileIndex = new Vector2Int(-8, -1);
     //[SerializeField] private Vector2Int maxTileIndex = new Vector2Int(-1, 2);
+    private void Start()
+    {
+        sr = GetComponentInChildren<SpriteRenderer>(); // 자식에 있을 수도 있으니까
 
-    public void SetDependencies(Grid grid, Tilemap tilemap, Vector3Int spawnIndex)
+    }
+    public void SetDependencies(Grid grid, Tilemap tilemap, GameUI gameUI, Vector3Int spawnIndex)
     {
         this.grid = grid;
         this.tilemap = tilemap;
+        this.gameUI = gameUI;
         this.currentPosition = spawnIndex;
         this.transform.position = grid.GetCellCenterWorld(spawnIndex);
     }
@@ -83,5 +93,30 @@ public class Player : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Card"))
+        {
+
+            if (gameUI != null)
+            {
+                gameUI.ReduceHeart();  // 호출 성공
+                StartCoroutine(Damage());
+            }
+
+        }
+    }
+
+    IEnumerator Damage()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            sr.color = Color.gray;
+            yield return new WaitForSeconds(0.2f);
+            sr.color = Color.white;
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }

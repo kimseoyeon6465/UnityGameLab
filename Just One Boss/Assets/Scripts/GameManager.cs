@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Grid grid;//게임 시작시 인스턴스               
     [SerializeField] private Tilemap tilemap;         
-    [SerializeField] private GameObject playerPrefab; 
+    [SerializeField] private GameObject playerPrefab;
+    public GameUI gameUI;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
         GameObject playerObj = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
 
         Player playerScript = playerObj.GetComponent<Player>();
-        playerScript.SetDependencies(grid, tilemap, spawnIndex);
+        playerScript.SetDependencies(grid, tilemap, gameUI, spawnIndex);
     }
 
    
