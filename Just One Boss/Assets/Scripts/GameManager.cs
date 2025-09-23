@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     public GameUI gameUI;
 
+
+
     void Start()
     {
         Vector3Int spawnIndex = new Vector3Int(-4, 0, 0); // ¿øÇÏ´Â ¼¿ ÀÎµ¦½º

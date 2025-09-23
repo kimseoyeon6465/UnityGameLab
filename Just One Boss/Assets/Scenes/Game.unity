@@ -608,6 +608,7 @@ MonoBehaviour:
   grid: {fileID: 3793351937319276014}
   tilemap: {fileID: 2166682556695813543}
   playerPrefab: {fileID: 5898730492010762369, guid: 99cc882b706a37f45b4d9de1a03b4d28, type: 3}
+  gameUI: {fileID: 0}
 --- !u!4 &1359917146
 Transform:
   m_ObjectHideFlags: 0
@@ -1028,6 +1029,22 @@ PrefabInstance:
     - target: {fileID: 2046254415511445644, guid: 35f632b8240a8ca4d85efeb20512a2c2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282179292638086569, guid: 35f632b8240a8ca4d85efeb20512a2c2, type: 3}
+      propertyPath: m_ChunkCullingBounds.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282179292638086569, guid: 35f632b8240a8ca4d85efeb20512a2c2, type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3665651981058433699, guid: 35f632b8240a8ca4d85efeb20512a2c2, type: 3}
+      propertyPath: m_CellSize.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3665651981058433699, guid: 35f632b8240a8ca4d85efeb20512a2c2, type: 3}
+      propertyPath: m_CellSize.y
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5479556980318544500, guid: 35f632b8240a8ca4d85efeb20512a2c2, type: 3}
       propertyPath: m_Name

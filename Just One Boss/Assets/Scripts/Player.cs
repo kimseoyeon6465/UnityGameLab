@@ -1,13 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
-using static UnityEditor.PlayerSettings;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +13,9 @@ public class Player : MonoBehaviour
     private Tilemap tilemap;
     private Vector3Int currentPosition;
     public GameUI gameUI;
+
+
+
     //[SerializeField] private Vector2Int minTileIndex = new Vector2Int(-8, -1);
     //[SerializeField] private Vector2Int maxTileIndex = new Vector2Int(-1, 2);
     private void Start()
@@ -97,8 +96,16 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Card"))
+        // if (collision.CompareTag("Card"))
+
+        //Card card = collision.GetComponent<Card>();
+        //if (card != null)
+        //{
+        //}
+
+        if(collision.TryGetComponent<Card>(out Card card))
         {
+            // card.~();
 
             if (gameUI != null)
             {
