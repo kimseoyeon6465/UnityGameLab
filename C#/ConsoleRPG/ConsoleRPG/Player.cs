@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ConsoleRPG
 {
 
-    class Character
+    class Character : IPrintable
     {
         // Status ( HP, MP, Atk, Def ...) 능력치
         // 공격 기능, 이동 기능, 방어 기능, 
@@ -15,6 +15,11 @@ namespace ConsoleRPG
         public virtual void Move()
         {
             Console.WriteLine("Character Move() : 두발 걷기");
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("Character");
         }
     }
 

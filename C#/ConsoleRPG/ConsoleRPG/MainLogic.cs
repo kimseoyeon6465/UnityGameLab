@@ -26,6 +26,15 @@ namespace ConsoleRPG
             List<Character> characters = new List<Character>();
             characters.Add(monster);
             characters.Add(player);
+            // characters[0].Print();
+            // Item item = new Item();
+
+            // is as
+            if (player is Character)
+            {
+                Character c =  (Character)player;
+                c = monster as Character;
+            }
 
         }
     }
