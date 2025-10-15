@@ -1,4 +1,6 @@
-﻿namespace ConsoleRPG
+﻿using System;
+
+namespace ConsoleRPG
 {
     internal class Program
     {
@@ -7,8 +9,10 @@
         // 메인 -> 운영체제 
         static void Main(string[] args)
         {
-            MainLogic mainLogic = new MainLogic();
-            mainLogic.Run();
+            
+            var game = new MainLogic();
+            //var는 컴파일러가 자료형을 추론하게 함, 코드 간결성 up, 반드시 초기화
+            game.Run();
         }
 
     }

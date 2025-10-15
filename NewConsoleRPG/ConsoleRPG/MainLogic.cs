@@ -16,7 +16,7 @@ namespace ConsoleRPG
         {
             while (true) 
             {
-                Console.writeLine("번호를 입력: ");
+                Console.WriteLine("번호를 입력: ");
                 Console.ReadLine();
             }
 
