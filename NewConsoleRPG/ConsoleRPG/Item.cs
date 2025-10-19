@@ -1,46 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleRPG
 {
-    interface IPrintable
+    public class Item
     {
-        public void Print();
-    }
-
-    abstract class Item
-    {
-        public bool used;
-        public abstract bool Use();
-    }
-
-    class EquipItem : Item, IPrintable
-    {
-        public void Print()
+        public string Name { get; private set; }
+        public string Type { get; private set; }
+        public Item(string name, string type)
         {
-            Console.WriteLine("EquipItme");
-        }
-
-        public override bool Use()
-        {
-            return true;
+            Name = name;
+            Type = type;
         }
     }
-
-    class UseItem : Item, IPrintable
+    public interface IUsable
     {
-        public void Print()
-        {
-            Console.WriteLine("EquipItme");
-        }
+        void UseOn(Object target);
+    }
 
-        public override bool Use()
+    public interface IEquipable
+    {
+        EquipSlot Slot { get; }
+        int AttackMod { get; }
+        int DefenseMod { get; }
+    }
+
+    public enum EquipSlot
+    {
+        Weapon,
+        Armor
+    }
+
+    public class Weapon : Item, IEquipable
+    {
+        public int AttackMod { get; private set; }
+        public int DefenseMod => 0;
+        public EquipSlot Slot => EquipSlot.Weapon;
+        public int UpgradeLevel { get; private set; }
+        public Weapon(string name, int attackMod) : base(name, "무기")
+
         {
-            return true;
+            AttackMod = attackMod;
+            UpgradeLevel = 0;
+        }
+        public void Upgrade()
+        {
+            UpgradeLevel++;
+            AttackMod++;
+        }
+    }
+
+    public class Armor : Item, IEquipable
+    {
+        public int AttackMod => 0;
+        public int DefenseMod { get; private set; }
+        public EquipSlot Slot => EquipSlot.Armor;
+        public int UpgradeLevel { get; private set; }
+
+        public Armor(string name, int defenseMod) : base(name, "방어구")
+        {
+            DefenseMod = defenseMod;
+            UpgradeLevel = 0;
+        }
+        public void Upgrade()
+        {
+            UpgradeLevel++;
+            DefenseMod++;
         }
     }
 }
+
