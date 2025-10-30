@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TheStack : MonoBehaviour
 {
+    public Text scoreText;
     public Color32[] gameColors = new Color32[4];
     public Material stackMat;
+    public GameObject endPanel;
 
     private const float BOUNDS_SIZE = 3.5f;
     private const float STACK_MOVING_SPEED = 5.0f;
@@ -55,12 +59,15 @@ public class TheStack : MonoBehaviour
     }
     private void Update()
     {
+        if (gameOver)
+            return;
         if (Input.GetMouseButtonDown(0))
         {
             if (PlaceTile())
             {
                 SpawnTile();
                 scoreCount++;
+                scoreText.text = scoreCount.ToString();
 
             }
             else
@@ -74,8 +81,7 @@ public class TheStack : MonoBehaviour
     }
     private void MoveTile()
     {
-        if (gameOver)
-            return;
+       
         tileTransition += Time.deltaTime * tileSpeed;
         if (isMovingOnX)
             theStack[stackIndex].transform.localPosition = new Vector3(Mathf.Sin(tileTransition) * BOUNDS_SIZE, scoreCount, secondaryPosition);
@@ -206,9 +212,16 @@ public class TheStack : MonoBehaviour
     }
     private void EndGame()
     {
+        if (PlayerPrefs.GetInt("score") < scoreCount)
+            PlayerPrefs.SetInt("score", scoreCount);
         Debug.Log("GAME OVER");
         gameOver = true;
+        endPanel.SetActive(true);
         theStack[stackIndex].AddComponent<Rigidbody>();
+    }
+    public void OnButtonClick(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 
 }
