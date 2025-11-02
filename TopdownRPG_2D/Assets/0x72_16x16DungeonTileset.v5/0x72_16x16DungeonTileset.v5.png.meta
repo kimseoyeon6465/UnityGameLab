@@ -5809,7 +5809,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 0x72_16x16DungeonTileset.v5_289
+      name: chest_0
       rect:
         serializedVersion: 2
         x: 224
@@ -6844,7 +6844,6 @@ TextureImporter:
       0x72_16x16DungeonTileset.v5_285: -1104350406
       0x72_16x16DungeonTileset.v5_286: -1083124150
       0x72_16x16DungeonTileset.v5_287: 1939360242
-      0x72_16x16DungeonTileset.v5_289: 1111371826
       0x72_16x16DungeonTileset.v5_29: -1151522298
       0x72_16x16DungeonTileset.v5_290: 701380535
       0x72_16x16DungeonTileset.v5_291: -1805084765
@@ -6940,6 +6939,7 @@ TextureImporter:
       0x72_16x16DungeonTileset.v5_98: 1157449323
       0x72_16x16DungeonTileset.v5_99: -1489476418
       black: 1659745161
+      chest_0: 1111371826
       crate_0: -104493023
       crate_1: -163346178
       crate_2: 2011557063
