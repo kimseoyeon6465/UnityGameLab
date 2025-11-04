@@ -38,7 +38,7 @@ public class Collidable : MonoBehaviour
 
     protected virtual void OnCollide(Collider2D coll)
     {
-        Debug.Log(coll.name);//오브젝트.name은 해당 오브젝트의 이름 가져옴
+        Debug.Log("OnCollide was not implemented in " + this.name);//오브젝트.name은 해당 오브젝트의 이름 가져옴
     }
 }
 

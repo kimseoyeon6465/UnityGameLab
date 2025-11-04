@@ -10,11 +10,24 @@ public class FloatingTextManager : MonoBehaviour
 
     private List<FloatingText> floatingTexts = new List<FloatingText>();//Q:엥 이런것도 됨?
 
-    public void Show(string msg, int fontSize, Color color, Vector3 motion, float duration)
+    private void Update()
+    {
+        foreach (FloatingText txt in floatingTexts)
+        {
+            txt.UpdateFloatingText();
+        }
+    }
+    public void Show(string msg, int fontSize, Color color, Vector3 position, Vector3 motion, float duration)
     {
         FloatingText floatingText = GetFloatingText();
         floatingText.txt.text = msg;
-        //floatingText.txt.fontSize할 차례
+        floatingText.txt.fontSize = fontSize;
+        floatingText.txt.color = color;
+        floatingText.go.transform.position = Camera.main.WorldToScreenPoint(position);//월드좌표계를 스크린좌표계로
+        floatingText.motion = motion;
+        floatingText.duration = duration;
+
+        floatingText.Show();
     }
     private FloatingText GetFloatingText()//Q:???무슨 기능인지 이해 못함
     {
@@ -24,7 +37,9 @@ public class FloatingTextManager : MonoBehaviour
             txt = new FloatingText();
             txt.go = Instantiate(textPrefab);
             txt.go.transform.SetParent(textContainer.transform);
-            txt.txt = txt.go.GetComponent<Text>();
+            txt.txt = txt.go.GetComponent<Text>(); 
+            floatingTexts.Add(txt);
+
         }
         return txt;
 

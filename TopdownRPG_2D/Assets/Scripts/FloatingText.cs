@@ -32,7 +32,10 @@ public class FloatingText// 함수 오버라이드 안하고 just c#만 쓸거니까 Monobehavi
             return;
         }
         if(Time.time-lastShown>duration)//일정 시간 지나면 사라지게
+        {
+            Debug.Log("Hide 호출");
             Hide();
+        }
         go.transform.position += motion * Time.deltaTime;//떠다니게
 
     }
