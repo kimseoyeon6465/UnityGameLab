@@ -4969,7 +4969,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 0x72_16x16DungeonTileset.v5_258
+      name: menu_0
       rect:
         serializedVersion: 2
         x: 224
@@ -6662,7 +6662,6 @@ TextureImporter:
       0x72_16x16DungeonTileset.v5_254: -66371307
       0x72_16x16DungeonTileset.v5_255: 763013117
       0x72_16x16DungeonTileset.v5_256: -809438728
-      0x72_16x16DungeonTileset.v5_258: 64653963
       0x72_16x16DungeonTileset.v5_259: 600837318
       0x72_16x16DungeonTileset.v5_260: -832586474
       0x72_16x16DungeonTileset.v5_261: -391313262
@@ -6807,6 +6806,7 @@ TextureImporter:
       healingFountain_0: -395233012
       healingFountain_1: 2037891521
       healingFountain_2: -241855067
+      menu_0: 64653963
       pillar_0: -1076524134
       pillar_1: -204650517
       pillar_2: 1811238969

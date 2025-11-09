@@ -35,7 +35,8 @@ public class Enemy : Mover
         //Is the player in range?
         if(Vector3.Distance(playerTransform.position, startingPosition)<chaseLenght)
         {
-            chasing =Vector3.Distance(playerTransform.position, startingPosition)<triggerLenght;
+            if(Vector3.Distance(playerTransform.position, startingPosition) < triggerLenght) 
+                chasing =true;
             if(chasing)
             {
                 if(!collidingWithPlayer)
