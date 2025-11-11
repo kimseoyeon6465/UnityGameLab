@@ -10,6 +10,10 @@ public class FloatingTextManager : MonoBehaviour
 
     private List<FloatingText> floatingTexts = new List<FloatingText>();//Q:ø® ¿Ã∑±∞Õµµ µ ?
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     private void Update()
     {
         foreach (FloatingText txt in floatingTexts)

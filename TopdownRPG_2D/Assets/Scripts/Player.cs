@@ -11,6 +11,8 @@ public class Player : Mover
     {
         base.Start();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        DontDestroyOnLoad(gameObject);
     }
     private void FixedUpdate()
     {
@@ -36,7 +38,18 @@ public class Player : Mover
 
     public void SetLevel(int level)
     {
-        for(int i = 0; i < level; i++) 
+        for (int i = 0; i < level; i++)
             OnLevelUp();
+    }
+
+    public void Heal(int healingAmount)
+    {
+        if (hitpoint == maxHitpoint)
+            return;
+        hitpoint += healingAmount;
+        if(hitpoint > maxHitpoint)
+            hitpoint = maxHitpoint;
+        GameManager.instance.ShowText("+" + healingAmount.ToString() + "hp", 25, Color.white, transform.position, Vector3.up * 30, 3.0f);
+
     }
 }

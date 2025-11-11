@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
         if (GameManager.instance != null)
         {
             Destroy(gameObject);
+            Destroy(player.gameObject);
+            Destroy(floatingTextManager.gameObject);
             return;
         }
         instance = this;
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
     //Logic
     public int pesos;
     public int experience;
+    private bool hasLoaded = false; // 전역 변수 추가
 
 
     //Floating Text
@@ -131,6 +134,9 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log("SaveState Raw: " + PlayerPrefs.GetString("SaveState"));
 
+        //if (hasLoaded) return; // 이미 한 번 불렀으면 스킵
+        //hasLoaded = true;
+
         if (!PlayerPrefs.HasKey("SaveState"))
         {
             return;
@@ -148,10 +154,11 @@ public class GameManager : MonoBehaviour
         //Change the weapon Level
         weapon.SetWeaponLevel(int.Parse(data[3]));
 
-
+        player.transform.position = GameObject.Find("SpawnPoint").transform.position;
+        //instance.StartCoroutine(SetPlayerSpawnAfterFrame());
     }
 
-
+    
 }
 
 
