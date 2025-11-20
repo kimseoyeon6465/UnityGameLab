@@ -66,13 +66,5 @@ public class Card : MonoBehaviour
         return !tilemap.HasTile(cell);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Player¿Í Card Ãæµ¹");
-
-
-        }
-    }
+    
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,7 +11,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private GameObject cardPrefab;   // Card 컴포넌트가 있는 프리팹
     [SerializeField] private GameObject dashPrefab; // 스폰할 Dash 프리팹
-    
+    [SerializeField] private Player player;
 
 
     [Header("Spawn Settings")]
@@ -24,6 +25,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private bool loop = true; // 계속 반복할지
 
     private float timer;
+    private float cardTimer;
     [HideInInspector] public bool isDashSpawned = false; // 상태 플래그
     private Vector3Int lastSpawnedPos; // 마지막 스폰된 위치 저장
 
@@ -49,11 +51,11 @@ public class Spawner : MonoBehaviour
         };
     }
 
-
     private void Start()
     {
         StartCoroutine(SpawnLoop());
     }
+
     private void Update()
     {
         timer += Time.deltaTime;
@@ -62,6 +64,13 @@ public class Spawner : MonoBehaviour
             SpawnDash();
             timer = 0f;
         }
+
+       
+    }
+
+    public void SetPlayer(Player p)
+    {
+        player = p;
     }
 
     void SpawnDash()
@@ -83,7 +92,7 @@ public class Spawner : MonoBehaviour
                 GameObject dash = Instantiate(dashPrefab, worldPos, Quaternion.identity);
 
                 // Dash에게 Spawner 참조 넘기기
-                dash.GetComponent<Dash>().Init(this);
+                dash.GetComponent<Dash>().Init(this, player);
 
                 lastSpawnedPos = cellPos;
                 isDashSpawned = true;
@@ -137,5 +146,11 @@ public class Spawner : MonoBehaviour
             if (tilemap != null) card.SetDependencies(tilemap);
             card.Init(info.dir, cardMoveSpeed, cardRotateSpeed, tilemap);
         }
+
+    }
+
+    private void InstantiateCard()
+    {
+        Instantiate(cardPrefab, cardPrefab.transform.position, Quaternion.identity);
     }
 }

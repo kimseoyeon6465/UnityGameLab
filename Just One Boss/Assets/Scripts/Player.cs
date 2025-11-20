@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     private Tilemap tilemap;
     private Vector3Int currentPosition;
     public GameUI gameUI;
-
+    [SerializeField] private float invincibleTime = 1.5f;
+    private bool isInvincible = false;
 
 
     //[SerializeField] private Vector2Int minTileIndex = new Vector2Int(-8, -1);
@@ -21,7 +22,9 @@ public class Player : MonoBehaviour
     private void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>(); // 자식에 있을 수도 있으니까
-
+        Spawner spawner = FindObjectOfType<Spawner>();
+        if (spawner != null)
+            spawner.SetPlayer(this);
     }
     public void SetDependencies(Grid grid, Tilemap tilemap, GameUI gameUI, Vector3Int spawnIndex)
     {
@@ -96,21 +99,20 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // if (collision.CompareTag("Card"))
+        if (isInvincible) return; // 무적일 때 충돌 무시
 
-        //Card card = collision.GetComponent<Card>();
-        //if (card != null)
-        //{
-        //}
 
-        if(collision.TryGetComponent<Card>(out Card card))
+        if (collision.TryGetComponent<Card>(out Card card))
         {
             // card.~();
 
             if (gameUI != null)
             {
+                gameUI.ResetCombo();
+
                 gameUI.ReduceHeart();  // 호출 성공
                 StartCoroutine(Damage());
+                StartCoroutine(Invincible());
             }
 
         }
@@ -118,7 +120,7 @@ public class Player : MonoBehaviour
 
     IEnumerator Damage()
     {
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             sr.color = Color.gray;
             yield return new WaitForSeconds(0.2f);
@@ -126,4 +128,12 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
     }
+
+    IEnumerator Invincible()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
+    }
+
 }
