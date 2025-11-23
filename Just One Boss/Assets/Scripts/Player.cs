@@ -60,10 +60,19 @@ public class Player : MonoBehaviour
         if (direction != Vector2Int.zero)
         {
             Move(direction);
-            Debug.Log(this.transform.position);
+            //Debug.Log(this.transform.position);
         }
     }
 
+    public int GetX()
+    {
+        return currentPosition.x;
+    }
+
+    public int GetY()
+    {
+        return currentPosition.y;
+    }
     private void Move(Vector2Int translation)
     {
         Vector3Int newPos = currentPosition + new Vector3Int(translation.x, translation.y, 0);
@@ -102,14 +111,16 @@ public class Player : MonoBehaviour
         if (isInvincible) return; // 公利老 锭 面倒 公矫
 
 
-        if (collision.TryGetComponent<Card>(out Card card))
+        if (collision.TryGetComponent<Card>(out Card card) || collision.TryGetComponent<LaserProjectile>(out LaserProjectile laser))
         {
             // card.~();
 
             if (gameUI != null)
             {
                 gameUI.ResetCombo();
-
+                FloatingTextManager.ClearAll();
+                Spawner spawner = FindObjectOfType<Spawner>();
+                if (spawner != null) spawner.ResetDash();
                 gameUI.ReduceHeart();  // 龋免 己傍
                 StartCoroutine(Damage());
                 StartCoroutine(Invincible());

@@ -15,9 +15,18 @@ public class Spawner : MonoBehaviour
 
 
     [Header("Spawn Settings")]
-    [SerializeField] private float dashSpawnInterval = 4f; // 몇 초마다 생성할지
-    [SerializeField] private float CardSpawnInterval = 2.5f;
-    [SerializeField] private float cardMoveSpeed = 5.0f;
+
+    public bool enableCard = true;
+    public bool enableDash = true;
+    public bool enableLaser = true;
+    public bool enableNegativeTile = false;
+    public bool enableCoin = false;
+    public bool enableClone = false;
+    public bool enableBoss2 = false;
+
+    public float dashSpawnInterval = 4f; // 몇 초마다 생성할지
+    public float CardSpawnInterval = 2.5f;
+    public float cardMoveSpeed = 5.0f;
     [SerializeField] private float cardRotateSpeed = 100f;
 
     public enum Pattern { G_N_D_R_M, D_G_R_N_M }
@@ -75,6 +84,8 @@ public class Spawner : MonoBehaviour
 
     void SpawnDash()
     {
+        //if (!enableDash)//enableDash가 꼭 필요한가?
+        //    return;
         if (isDashSpawned) return; // 이미 스폰되어 있으면 무시
 
         BoundsInt bounds = tilemap.cellBounds;
@@ -109,7 +120,10 @@ public class Spawner : MonoBehaviour
         do
         {
             string[] order = UnityEngine.Random.value < 0.5f ? order1 : order2;
-            yield return StartCoroutine(SpawnPattern(order));
+            if (enableCard)
+                yield return StartCoroutine(SpawnPattern(order));
+            else
+                yield return null;
         } while (loop);
     }
 
@@ -117,13 +131,17 @@ public class Spawner : MonoBehaviour
     {
         foreach (var key in order)
         {
-            SpawnCard(key);
+            if (enableCard)
+                SpawnCard(key);
             yield return new WaitForSeconds(CardSpawnInterval);
         }
     }
 
     private void SpawnCard(string key)
     {
+        if (!enableCard)
+            return;
+
         if (!points.TryGetValue(key, out var info))
         {
             Debug.LogWarning($"[Spawner] Unknown key: {key}");
@@ -152,5 +170,85 @@ public class Spawner : MonoBehaviour
     private void InstantiateCard()
     {
         Instantiate(cardPrefab, cardPrefab.transform.position, Quaternion.identity);
+    }
+
+    public void SpawnLaser()
+    {
+        if (!enableLaser) return;
+        Debug.Log("SpawnLaser 호출");
+        BoundsInt bounds = tilemap.cellBounds;
+        int playerX = player.GetX();
+
+        //레이저 생성 위치 선택
+        int randomX;
+        do
+        {
+            randomX = UnityEngine.Random.Range(bounds.xMin, bounds.xMax);
+        }
+        while (randomX == playerX);
+
+        int centerY = ((bounds.yMin + bounds.yMax) / 2)-1;
+
+        Vector3Int cellPos = new Vector3Int(randomX, centerY, 0);
+
+        if (!tilemap.HasTile(cellPos))
+        {
+            Debug.Log("레이저 스폰 취소: 타일 없음");
+            return;
+        }
+        Vector3 worldPos = tilemap.GetCellCenterWorld(cellPos);
+
+        LaserManager.instance.FireLaser(worldPos, Vector3.down, 0.15f);
+
+        StartCoroutine(SpawnGrowLaser(worldPos, randomX));
+    }
+
+    private IEnumerator SpawnGrowLaser(Vector3 worldPos, int spawnX)
+    {
+        yield return new WaitForSeconds(0.15f);  // 예고 끝난 후 등장
+
+        GameObject laser = Instantiate(LaserManager.instance.laserPrefab, worldPos, Quaternion.identity);
+
+        laser.transform.up = Vector3.down;
+
+        // Grow + 이동 방향 판단
+        laser.GetComponent<LaserProjectile>().Init(tilemap, spawnX);
+    }
+
+    public void SpawnNegativeTiles()
+    {
+        if (!enableNegativeTile) return;
+        // TODO: NegativeTileManager.GenerateTiles()
+    }
+
+    public void SpawnCoin()
+    {
+        if (!enableCoin) return;
+        // TODO: CoinProjectile.Create(player.position)
+    }
+
+    public void SpawnClone()
+    {
+        if (!enableClone) return;
+        // TODO: Instantiate(ClonePrefab)
+    }
+
+    public void SpawnBoss2()
+    {
+        if (!enableBoss2) return;
+        // TODO: Instantiate(Boss2Prefab)
+    }
+    public void ResetDash()
+    {
+        Dash d = FindObjectOfType<Dash>();
+        if (d != null)
+        {
+            Destroy(d.gameObject);
+        }
+        // 다시 Dash 스폰 가능하도록
+        isDashSpawned = false;
+
+        // 기본 Dash 바로 다시 스폰
+        SpawnDash();
     }
 }

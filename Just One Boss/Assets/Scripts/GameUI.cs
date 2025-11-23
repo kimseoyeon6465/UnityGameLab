@@ -31,6 +31,8 @@ public class GameUI : MonoBehaviour
         currentIndex = hearts.Length - 1; // 마지막 하트부터 제거
     }
 
+    public int GetScore() => score;
+    public int GetRageValue() => rage;
     public int GetCombo() => combo;
     public void AddCombo()
     {
