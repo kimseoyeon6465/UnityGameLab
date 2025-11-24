@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEditor.PlayerSettings;
 
-public class Card : MonoBehaviour
+public class Card : Collidable
 {
+    public override bool CauseDamage() => true;
     private Tilemap tilemap;
 
 

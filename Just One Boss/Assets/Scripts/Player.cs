@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 
 public class Player : MonoBehaviour
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour
     {
         Vector3Int newPos = currentPosition + new Vector3Int(translation.x, translation.y, 0);
 
-        if (IsValid(newPos))
+        if (Board.instance.IsValid(newPos))
         {
             currentPosition = newPos;
             transform.position = grid.GetCellCenterWorld(currentPosition);
@@ -90,32 +91,17 @@ public class Player : MonoBehaviour
     }
 
 
-    private bool IsValid(Vector3Int pos)
-    {
-        // BoundsInt.max는 경계의 다음 칸을 나타내므로 -1
-        BoundsInt bounds = tilemap.cellBounds;
-        Vector3Int minBound = bounds.min;
-        Vector3Int maxBound = bounds.max - Vector3Int.one;
-
-        if (pos.x >= minBound.x && pos.x <= maxBound.x &&
-            pos.y >= minBound.y && pos.y <= maxBound.y)
-        {
-            return tilemap.HasTile(pos);//내장함수 HasTile
-        }
-
-        return false;
-    }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (isInvincible) return; // 무적일 때 충돌 무시
 
-
-        if (collision.TryGetComponent<Card>(out Card card) || collision.TryGetComponent<LaserProjectile>(out LaserProjectile laser))
+        if(collision.TryGetComponent<Collidable>(out Collidable hit))
         {
             // card.~();
 
-            if (gameUI != null)
+            if (hit.CauseDamage())
             {
                 gameUI.ResetCombo();
                 FloatingTextManager.ClearAll();

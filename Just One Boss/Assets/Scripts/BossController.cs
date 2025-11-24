@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
+    public bool DevMode = true;   // 개발용 강제 Phase 전환 모드
     [Header("Phase Info")]
     public int phase = 1;
 
@@ -27,7 +28,17 @@ public class BossController : MonoBehaviour
         score = gameUI.GetScore();
         bossGauge = gameUI.GetRageValue();
 
-        TryPhaseChange();
+        if (DevMode && Input.GetKeyDown(KeyCode.Space))
+        {
+            // 강제로 Phase 전환
+            SetPhase(phase + 1);
+        }
+
+        if (!DevMode)
+        {
+            TryPhaseChange();
+        }
+
         if (spawner.enableLaser)
         {
             laserTimer += Time.deltaTime;
@@ -43,7 +54,7 @@ public class BossController : MonoBehaviour
 
     void TryPhaseChange()
     {
-        if (phase == 1 && score >= 9000 && bossGauge >= 10)
+        if (phase == 1 && score >= 900 && bossGauge >= 10)
             SetPhase(2);
 
         else if (phase == 2 && score >= 14000 && bossGauge >= 10)
@@ -57,11 +68,14 @@ public class BossController : MonoBehaviour
     }
     void SetPhase(int newPhase)
     {
+        if (newPhase > 4)
+            return;
         phase = newPhase;
         Debug.Log("=== Phase → " + phase + " ===");
 
         ResetBossGauge();
         ApplyPhaseStartSettings(phase);
+        spawner.SpawnNegativeTiles();
 
         //TODO: 연출
     }

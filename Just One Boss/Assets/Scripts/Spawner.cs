@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Spawner : MonoBehaviour
 {
+
+    public NegativeTileManager negativeTileManager;
+
     [Header("Refs")]
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private GameObject cardPrefab;   // Card 컴포넌트가 있는 프리팹
@@ -74,7 +78,7 @@ public class Spawner : MonoBehaviour
             timer = 0f;
         }
 
-       
+
     }
 
     public void SetPlayer(Player p)
@@ -84,32 +88,33 @@ public class Spawner : MonoBehaviour
 
     void SpawnDash()
     {
-        //if (!enableDash)//enableDash가 꼭 필요한가?
-        //    return;
+
         if (isDashSpawned) return; // 이미 스폰되어 있으면 무시
 
-        BoundsInt bounds = tilemap.cellBounds;
+        int count = Board.instance.validTiles.Count;
+        if (count == 0) return;
 
-        for (int i = 0; i < 20; i++) // 최대 20번 시도
+        Vector3Int cellPos;
+        int safety = 0;
+        do
         {
-            int x = UnityEngine.Random.Range(bounds.xMin, bounds.xMax);
-            int y = UnityEngine.Random.Range(bounds.yMin, bounds.yMax);
-            Vector3Int cellPos = new Vector3Int(x, y, 0);
-
-            // 타일이 있고, 이전에 스폰된 위치와 다르면 OK
-            if (tilemap.HasTile(cellPos) && cellPos != lastSpawnedPos)
-            {
-                Vector3 worldPos = tilemap.GetCellCenterWorld(cellPos);
-                GameObject dash = Instantiate(dashPrefab, worldPos, Quaternion.identity);
-
-                // Dash에게 Spawner 참조 넘기기
-                dash.GetComponent<Dash>().Init(this, player);
-
-                lastSpawnedPos = cellPos;
-                isDashSpawned = true;
-                return;
-            }
+            int index = UnityEngine.Random.Range(0, count);
+            cellPos = Board.instance.validTiles.ElementAt(index);//ElementAt은 데이터 집합에서 특정 인덱스 반환
+            safety++;
         }
+        while (cellPos == lastSpawnedPos && safety > 20);
+
+        Vector3 worldPos = tilemap.GetCellCenterWorld(cellPos);
+
+
+        GameObject dash = Instantiate(dashPrefab, worldPos, Quaternion.identity);
+
+        // Dash에게 Spawner 참조 넘기기
+        dash.GetComponent<Dash>().Init(this, player);
+
+        lastSpawnedPos = cellPos;
+        isDashSpawned = true;
+        
     }
     private IEnumerator SpawnLoop()
     {
@@ -175,32 +180,33 @@ public class Spawner : MonoBehaviour
     public void SpawnLaser()
     {
         if (!enableLaser) return;
-        Debug.Log("SpawnLaser 호출");
-        BoundsInt bounds = tilemap.cellBounds;
+
+        List<int> xs = Board.instance.validXs;
+
         int playerX = player.GetX();
 
-        //레이저 생성 위치 선택
-        int randomX;
-        do
+        List<int> candidates = new List<int>();
+        foreach(int x in xs)
         {
-            randomX = UnityEngine.Random.Range(bounds.xMin, bounds.xMax);
+            if(x!=playerX)
+                candidates.Add(x);
         }
-        while (randomX == playerX);
 
-        int centerY = ((bounds.yMin + bounds.yMax) / 2)-1;
-
-        Vector3Int cellPos = new Vector3Int(randomX, centerY, 0);
-
-        if (!tilemap.HasTile(cellPos))
+        if (candidates.Count == 0)
         {
-            Debug.Log("레이저 스폰 취소: 타일 없음");
+            Debug.LogWarning("레이저 스폰 실패");
             return;
         }
+        int randomX = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+
+        int centerY = Board.instance.validYs[Board.instance.validYs.Count/2];
+
+        Vector3Int cellPos = new Vector3Int(randomX, centerY, 0);
         Vector3 worldPos = tilemap.GetCellCenterWorld(cellPos);
 
         LaserManager.instance.FireLaser(worldPos, Vector3.down, 0.15f);
-
         StartCoroutine(SpawnGrowLaser(worldPos, randomX));
+        
     }
 
     private IEnumerator SpawnGrowLaser(Vector3 worldPos, int spawnX)
@@ -218,7 +224,7 @@ public class Spawner : MonoBehaviour
     public void SpawnNegativeTiles()
     {
         if (!enableNegativeTile) return;
-        // TODO: NegativeTileManager.GenerateTiles()
+        negativeTileManager.StartNegativeTiles();
     }
 
     public void SpawnCoin()

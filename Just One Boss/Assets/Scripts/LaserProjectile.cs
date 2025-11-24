@@ -4,8 +4,10 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class LaserProjectile : MonoBehaviour
+public class LaserProjectile : Collidable
 {
+    public override bool CauseDamage() => true;
+
     public float growSpeed = 30f;
     public float maxLength = 12f;
     public float moveSpeed = 6f;
