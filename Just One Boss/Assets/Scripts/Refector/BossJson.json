@@ -1,0 +1,74 @@
+{
+  "bossId": "just_on_boss",
+  "maxHp": 1000,
+  "phases": [
+    {
+      "name": "Phase1",
+      "minHpPercent": 0.7,
+      "maxHpPercent": 1.0,
+      "attackOrder": "sequence",
+      "overrideBoardSize": false,
+      "boardWidth": 100,
+      "boardHeight": 60,
+      "attacks": [
+        {
+          "attackId": "random_cells",
+          "repeat": 1,
+          "cooldown": 1.0
+        },
+        {
+          "attackId": "cross_warning",
+          "repeat": 1,
+          "cooldown": 1.5
+        }
+      ]
+    },
+    {
+      "name": "Phase2",
+      "minHpPercent": 0.4,
+      "maxHpPercent": 0.7,
+      "attackOrder": "sequence",
+      "overrideBoardSize": true,
+      "boardWidth": 8,
+      "boardHeight": 6,
+      "attacks": [
+        {
+          "attackId": "diagonal_warning",
+          "repeat": 1,
+          "cooldown": 1.2
+        },
+        {
+          "attackId": "random_cells",
+          "repeat": 2,
+          "cooldown": 0.8
+        }
+      ]
+    },
+    {
+      "name": "Phase3",
+      "minHpPercent": 0.0,
+      "maxHpPercent": 0.4,
+      "attackOrder": "random",
+      "overrideBoardSize": true,
+      "boardWidth": 6,
+      "boardHeight": 6,
+      "attacks": [
+        {
+          "attackId": "cross_warning",
+          "repeat": 1,
+          "cooldown": 0.8
+        },
+        {
+          "attackId": "diagonal_warning",
+          "repeat": 1,
+          "cooldown": 0.8
+        },
+        {
+          "attackId": "random_cells",
+          "repeat": 3,
+          "cooldown": 0.5
+        }
+      ]
+    }
+  ]
+}

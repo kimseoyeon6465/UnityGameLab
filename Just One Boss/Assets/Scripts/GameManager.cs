@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
         GameObject playerObj = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
 
         Player playerScript = playerObj.GetComponent<Player>();
-        playerScript.SetDependencies(grid, tilemap, gameUI, spawnIndex);
+        //playerScript.SetDependencies(grid, tilemap, gameUI, spawnIndex);
     }
 
    

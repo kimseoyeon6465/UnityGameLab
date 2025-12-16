@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossController : MonoBehaviour
+public class BossController_ : MonoBehaviour
 {
     public bool DevMode = true;   // 개발용 강제 Phase 전환 모드
     [Header("Phase Info")]

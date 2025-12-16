@@ -183,7 +183,7 @@ public class Spawner : MonoBehaviour
 
         List<int> xs = Board.instance.validXs;
 
-        int playerX = player.GetX();
+        int playerX = 0;//  player.GetX();
 
         List<int> candidates = new List<int>();
         foreach(int x in xs)
